@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>Платіжне доручення</h3>
+    <form name="payment">
+        <fieldset>
+            <legend>Платник</legend>
+            <label for="payer" class="required">ПІБ платника</label>
+            <input type="text" name="payer" placeholder="ПІБ платника" id="payer" size="50" minlength="8" maxlength="50"
+                required>
+            <br /><label for="phone" class="required">Телефон</label>
+            <input type="tel" name="phone" placeholder="e.g. 38099-999-99-99" id="phone" size="50" maxlength="15"
+                required title='pattern: 012-234-6789' pattern="380[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}">
+            <br /><label for="mail" class="required">e-mail</label>
+            <input type="email" name="mail" placeholder="email@address.com" id="mail" size="50" maxlength="50" required>
+        </fieldset>
+        <fieldset>
+            <legend>Реквізити одержувача</legend>
+            <label for="recepient" class="required">Одержувач</label>
+            <input type="text" name="recepient" id="recepient" placeholder="ПІБ одержувача" size="50" maxlength="50"
+                required>
+            <br /><label for="edrpou" class="required">ЄДРПОУ</label>
+            <input type="text" name="edrpou" id="edrpou" placeholder="Код ЄДРПОУ має містити 8 цифр" pattern="\d*"
+                size="50" minlength="8" maxlength="8" required>
+            <br /><label for="iban" class="required">IBAN</label>
+            <input type="text" name="iban" id="iban" placeholder="IBAN має містити 29 цифр" size="50" minlength="29"
+                maxlength="29" required>
+        </fieldset>
+        <fieldset>
+            <legend>Призначення платежу</legend>
+            <br /><label for=purpose class="required">Призначення</label>
+            <textarea id="purpose" name="purpose" placeholder="Призначення платежу" rows="5" cols="33"
+                required></textarea>
+        </fieldset>
+        <fieldset>
+            <br /><label for="sum" class="required">Сума, UAH</label>
+            <input type="number" name="sum" id="sum" placeholder="Сума" size="50" minlength="29" maxlength="29"
+                required>
+            <br /><label for="sum" class="required">Валюта платежу</label>
+            <select name="currency" id="currency">
+                <option value="1">Гривня, UAH
+                <option value="37">Долар США, USD
+                <option value="38">Євро, EUR
+                <option value="8">Польський злотий, PLN
+            </select>
+            <br /><label for="total">Сума</label>
+            <input type="number" name="total" placeholder="Сума в вибраній валюті, розраховується автоматично"
+                id="total" size="50" maxlength="29" disabled>
+        </fieldset>
+        <fieldset>
+            <br /><label for="commission">Комісія</label>
+            <input type="text" name="commission" id="commission"
+                placeholder="Сума комісії, в вибраній валюті, розраховується автоматично" size="50" maxlength="29"
+                disabled>
+        </fieldset>
+        <input type=submit class='btn' id="sendPayment" value=Оплатити>
+    </form>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
