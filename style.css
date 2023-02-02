@@ -10,7 +10,7 @@
     label {
         display: inline-block;
         font-weight: bold;
-        width: 250px;
+        width: 200px;
         margin: 5px 0px;
     }
 
@@ -22,7 +22,7 @@
     input,
     textarea,
     select {
-        width: 250px;
+        width: 200px;
     }
 
     .btn {
@@ -49,6 +49,29 @@
         color: red;
         border: 2px solid red;
     }
+
+    textarea {
+        margin: 0px;
+    }
+
+    .msg_non {
+        visibility:hidden; 
+        width: 200px;
+    }
+
+    .msg_err {
+        visibility:visible;
+        color:red;
+        font-size:10pt;
+        width: 200px;
+    }
+
+    .msg_ok {
+        visibility:visible;
+        color:green;
+        font-size:10pt;
+        width: 200px;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -63,7 +86,7 @@
     label {
         display: inline-block;
         font-weight: bold;
-        width: 460px;
+        width: 200px;
         margin: 5px 0px;
     }
 
@@ -75,7 +98,7 @@
     input,
     textarea,
     select {
-        width: 460px;
+        width: 200px;
         margin: 3px 0px 2px 0px;
     }
 
@@ -103,6 +126,29 @@
         color: red;
         border: 2px solid red;
     }
+
+    textarea {
+        margin: 0px;
+    }
+
+    .msg_non {
+        visibility:hidden; 
+        width: 200px;
+    }
+
+    .msg_err {
+        visibility:visible;
+        color:red;
+        font-size:10pt;
+        width: 200px;
+    }
+
+    .msg_ok {
+        visibility:visible;
+        color:green;
+        font-size:10pt;
+        width: 200px;
+    }
 }
 
 @media (min-width: 991px) and (max-width: 1199px) {
@@ -117,7 +163,7 @@
     label {
         display: inline-block;
         font-weight: bold;
-        width: 560px;
+        width: 250px;
         margin: 8px 0px;
     }
 
@@ -129,7 +175,7 @@
     input,
     textarea,
     select {
-        width: 560px;
+        width: 300px;
         margin: 3px 0px 2px 0px;
     }
 
@@ -157,6 +203,29 @@
         color: red;
         border: 2px solid red;
     }
+
+    textarea {
+        margin: 0px;
+    }
+
+    .msg_non {
+        visibility:hidden; 
+        width: 200px;
+    }
+
+    .msg_err {
+        visibility:visible;
+        color:red;
+        font-size:10pt;
+        width: 200px;
+    }
+
+    .msg_ok {
+        visibility:visible;
+        color:green;
+        font-size:10pt;
+        width: 200px;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -171,7 +240,7 @@
     label {
         display: inline-block;
         font-weight: bold;
-        width: 910px;
+        width: 250px;
         margin: 3px 0px;
     }
 
@@ -183,7 +252,7 @@
     input,
     textarea,
     select {
-        width: 910px;
+        width: 600px;
         margin: 10px 0px 10px 0px;
     }
 
@@ -216,4 +285,50 @@
         color: red;
         border: 2px solid red;
     }
+
+    textarea {
+        margin: 0px;
+    }
+
+    .msg_non {
+        visibility:hidden; 
+        width: 250px;
+    }
+
+    .msg_err {
+        visibility:visible;
+        color:red;
+        font-size:10pt;
+        width: 250px;
+    }
+
+    .msg_ok {
+        visibility:visible;
+        color:green;
+        font-size:10pt;
+        width: 250px;
+    }
 }
+
+#transactions {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #transactions td, #transactions th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #transactions tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #transactions tr:hover {background-color: #ddd;}
+  
+  #transactions th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }

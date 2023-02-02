@@ -1,15 +1,19 @@
 document.getElementById('sendPayment').onclick = function () {
-    if (validate_form(this.form) && save_data(this.form))
-        win_info(this.form);
+    if (validate_form(this.form)) {
+        save_data(this.form);
+        add_data();
+    }
     return false;
 };
+
+document.addEventListener("DOMContentLoaded", add_data);
 
 document.getElementById("currency").onchange = function () {
     let sum = document.getElementById("sum").value;
     let currencyDivider = this.value;
     let totalSum = Math.round(sum / currencyDivider * 100) / 100;
     document.getElementById("total").value = totalSum;
-    document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) /100;
+    document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) / 100;
     let curencyName = this.options[this.selectedIndex].text;
     let curencyCode = curencyName.substring(curencyName.length - 4, curencyName.length)
     let totalLbl = get_label(total);
@@ -22,7 +26,7 @@ document.getElementById("sum").onchange = function () {
     let currency = document.getElementById("currency");
     let totalSum = Math.round(this.value / currency.value * 100) / 100;
     document.getElementById("total").value = totalSum;
-    document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) /100;
+    document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) / 100;
     let curencyName = currency.options[currency.selectedIndex].text;
     let curencyCode = curencyName.substring(curencyName.length - 4, curencyName.length)
     let totalLbl = get_label(total);
@@ -31,13 +35,11 @@ document.getElementById("sum").onchange = function () {
     commissionLabel.innerText = 'Комісія, ' + curencyCode;
 }
 
-
-
-function validate_form(form_obj) {
+function validate_form2(form_obj) {
     let ok = false;
     with (form_obj)
-    if (payer.value.length < 6) {
-        alert("Помилка: ПІБ платника");
+    if (payer.value.split(' ').length <= 2) {
+        alert("Помилка: ПІБ платника, повинно містити Прізвище Ім'я По-батькові");
         if (lb = get_label(payer)) alert(lb.innerText);
         payer.focus();
     }
@@ -45,17 +47,54 @@ function validate_form(form_obj) {
         alert("Помилка: адреса e-mail");
         mail.focus();
     }
-    else if (check_mail(mail.value)) {
-        alert("Помилка: адреса e-mail");
-        mail.focus();
+    else if (recepient.value.length < 8) {
+        alert("Помилка: Одержувач, повинно містити мінімум 8 символів");
+        if (lb = get_label(recepient)) alert(lb.innerText);
+        recepient.focus();
+    }
+    else if (edrpou.value.length != 8) {
+        alert("Помилка: ЄДРПОУ, повинно містити 8 цифр");
+        if (lb = get_label(edrpou)) alert(lb.innerText);
+        edrpou.focus();
+    }
+    else if (iban.value.length != 29) {
+        alert("Помилка: IBAN, повинно містити 29 символів");
+        if (lb = get_label(iban)) alert(lb.innerText);
+        iban.focus();
+    }
+    else if (purpose.value.length < 10) {
+        alert("Помилка: Призначення платежу, заповніть Призначення платежу, мінімум 10 символів");
+        if (lb = get_label(purpose)) alert(lb.innerText);
+        purpose.focus();
     }
     else if (currency.selectedIndex < 0) {
         alert("Помилка: валюта платежу");
         currency.focus();
     }
+    else if (sum.value < 1) {
+        alert("Помилка: Сума платежу, повинна бути більше 0");
+        if (lb = get_label(sum)) alert(lb.innerText);
+        sum.focus();
+    }
     else ok = true;
     return ok;
 };
+
+function validate_form(form) {
+    var ok = true;
+    with (form) {
+        ok = err_msg(payer, payer.value.split(' ').length <= 2) && ok;
+        pat = new RegExp(phone.pattern);
+        ok = err_msg(phone, !pat.test(phone.value)) && ok;
+        ok = err_msg(mail, check_mail(mail.value)) && ok;
+        ok = err_msg(recepient, recepient.value.length < 8) && ok;
+        ok = err_msg(edrpou, edrpou.value.length != 8) && ok;
+        ok = err_msg(iban, iban.value.length != 29) && ok;
+        ok = err_msg(purpose, purpose.value.length < 10) && ok;
+        ok = err_msg(sum, sum.value < 1) && ok;
+    }
+    return ok;
+}
 
 function get_label(el) {
     let lbls = el.form.getElementsByTagName('label');
@@ -86,9 +125,12 @@ function check_mail(mail) {
     return 0;
 }
 
-let data = [];
+let tlog = [];
 function save_data(form) {
-    let obj = { payer: '', mail: '', phone: '' };
+    if(sessionStorage.getItem('transactionLog')){
+        tlog = JSON.parse(sessionStorage.getItem("transactionLog")); 
+    }
+    let obj = { payer: '', phone: '', mail: '', recepient: '', edrpou: '', iban: '', purpose: '', sum: '', currency: '', total: '', commission: '' };
     obj.payer = form.payer.value;
     obj.phone = form.phone.value;
     obj.mail = form.mail.value;
@@ -97,10 +139,11 @@ function save_data(form) {
     obj.iban = form.iban.value;
     obj.purpose = form.purpose.value;
     obj.sum = form.sum.value;
-    obj.currency = form.currency.value;
+    obj.currency = form.currency.options[form.currency.selectedIndex].text;
     obj.total = form.total.value;
     obj.commission = form.commission.value;
-    data.push(obj);
+    tlog.push(obj);
+    sessionStorage.setItem('transactionLog', JSON.stringify(tlog));
     return true;
 }
 
@@ -124,4 +167,50 @@ function win_info(frm) {
             w.focus();
             setTimeout('w.close()', 50000);
         }
+}
+
+function err_msg(obj, error) {
+    var msg = '',
+        err_label;
+    err_label = document.getElementById(obj.name + '_err');
+    if (!error) {
+        if (err_label) {
+            err_label.innerText = 'OK';
+            err_label.className = 'msg_ok';
+        }
+        return true;
+    }
+    if (lb = get_label(obj)) msg = 'Помилка вводу: ' + lb.innerText;
+    else msg = 'Помилка вводу';
+    if (err_label) {
+        err_label.innerText = msg;
+        err_label.className = 'msg_err';
+    }
+    else alert(msg);
+    obj.focus();
+    return false;
+}
+
+function add_data() {
+    if(sessionStorage.getItem('transactionLog')){
+        tlog = JSON.parse(sessionStorage.getItem("transactionLog")); 
+    } else {
+        tlog = [];
+    } 
+    var rows = "";
+    var header = '<tr><th>'+'ПІБ платника'+'</th><th>'+'Телефон'+'</th>'+
+    '<th>'+'e-mail'+'</th>'+'<th>'+'Одержувач'+'</th>'+
+    '<th>'+'ЄДРПОУ'+'</th>'+'<th>'+'IBAN'+'</th>'+
+    '<th>'+'Призначення'+'</th>'+'<th>'+'Сума, UAH'+'</th>'+
+    '<th>'+'currency'+'</th>'+'<th>'+'Сума'+'</th>'+'<th>'+'Комісія'+'</th></tr>';
+    rows = header;
+    tlog.map((row)=>{
+        var row = '<tr><td>'+row.payer+'</td>'+'<td>'+row.phone+'</td>'+'<td>'+row.mail+'</td>'+
+        '<td>'+row.recepient+'</td>'+'<td>'+row.edrpou+'</td>'+'<td>'+row.iban+'</td>'+
+        '<td>'+row.purpose+'</td>'+'<td>'+row.sum+'</td>'+'<td>'+row.currency+'</td>'+
+        '<td>'+row.total+'</td>'+'<td>'+row.commission+'</td></tr>';
+        rows = rows+row;
+    })
+    var tbody = document.getElementById("transactions");
+    tbody.innerHTML = rows;
 }
