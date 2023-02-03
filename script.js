@@ -9,9 +9,10 @@ document.getElementById('sendPayment').onclick = function () {
 document.addEventListener("DOMContentLoaded", add_data);
 
 document.getElementById("currency").onchange = function () {
+    let currencyCollection = JSON.parse(localStorage.getItem("currency"));
+    let selectedCurrencyData = currencyCollection.filter(obj => { return obj.currencyCodeA == this.value });
     let sum = document.getElementById("sum").value;
-    let currencyDivider = this.value;
-    let totalSum = Math.round(sum / currencyDivider * 100) / 100;
+    let totalSum = Math.round(sum / selectedCurrencyData[0].rateSell * 100) / 100;
     document.getElementById("total").value = totalSum;
     document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) / 100;
     let curencyName = this.options[this.selectedIndex].text;
@@ -24,7 +25,9 @@ document.getElementById("currency").onchange = function () {
 
 document.getElementById("sum").onchange = function () {
     let currency = document.getElementById("currency");
-    let totalSum = Math.round(this.value / currency.value * 100) / 100;
+    let currencyCollection = JSON.parse(localStorage.getItem("currency"));
+    let selectedCurrencyData = currencyCollection.filter(obj => { return obj.currencyCodeA == currency.value });
+    let totalSum = Math.round(this.value / selectedCurrencyData[0].rateSell * 100) / 100;
     document.getElementById("total").value = totalSum;
     document.getElementById("commission").value = Math.round(totalSum * 0.05 * 100) / 100;
     let curencyName = currency.options[currency.selectedIndex].text;
@@ -127,8 +130,8 @@ function check_mail(mail) {
 
 let tlog = [];
 function save_data(form) {
-    if(sessionStorage.getItem('transactionLog')){
-        tlog = JSON.parse(sessionStorage.getItem("transactionLog")); 
+    if (sessionStorage.getItem('transactionLog')) {
+        tlog = JSON.parse(sessionStorage.getItem("transactionLog"));
     }
     let obj = { payer: '', phone: '', mail: '', recepient: '', edrpou: '', iban: '', purpose: '', sum: '', currency: '', total: '', commission: '' };
     obj.payer = form.payer.value;
@@ -192,25 +195,117 @@ function err_msg(obj, error) {
 }
 
 function add_data() {
-    if(sessionStorage.getItem('transactionLog')){
-        tlog = JSON.parse(sessionStorage.getItem("transactionLog")); 
+    if (sessionStorage.getItem('transactionLog')) {
+        tlog = JSON.parse(sessionStorage.getItem("transactionLog"));
     } else {
         tlog = [];
-    } 
+    }
     var rows = "";
-    var header = '<tr><th>'+'ПІБ платника'+'</th><th>'+'Телефон'+'</th>'+
-    '<th>'+'e-mail'+'</th>'+'<th>'+'Одержувач'+'</th>'+
-    '<th>'+'ЄДРПОУ'+'</th>'+'<th>'+'IBAN'+'</th>'+
-    '<th>'+'Призначення'+'</th>'+'<th>'+'Сума, UAH'+'</th>'+
-    '<th>'+'currency'+'</th>'+'<th>'+'Сума'+'</th>'+'<th>'+'Комісія'+'</th></tr>';
+    var header = '<tr><th>' + 'ПІБ платника' + '</th><th>' + 'Телефон' + '</th>' +
+        '<th>' + 'e-mail' + '</th>' + '<th>' + 'Одержувач' + '</th>' +
+        '<th>' + 'ЄДРПОУ' + '</th>' + '<th>' + 'IBAN' + '</th>' +
+        '<th>' + 'Призначення' + '</th>' + '<th>' + 'Сума, UAH' + '</th>' +
+        '<th>' + 'currency' + '</th>' + '<th>' + 'Сума' + '</th>' + '<th>' + 'Комісія' + '</th></tr>';
     rows = header;
-    tlog.map((row)=>{
-        var row = '<tr><td>'+row.payer+'</td>'+'<td>'+row.phone+'</td>'+'<td>'+row.mail+'</td>'+
-        '<td>'+row.recepient+'</td>'+'<td>'+row.edrpou+'</td>'+'<td>'+row.iban+'</td>'+
-        '<td>'+row.purpose+'</td>'+'<td>'+row.sum+'</td>'+'<td>'+row.currency+'</td>'+
-        '<td>'+row.total+'</td>'+'<td>'+row.commission+'</td></tr>';
-        rows = rows+row;
+    tlog.map((row) => {
+        var row = '<tr><td>' + row.payer + '</td>' + '<td>' + row.phone + '</td>' + '<td>' + row.mail + '</td>' +
+            '<td>' + row.recepient + '</td>' + '<td>' + row.edrpou + '</td>' + '<td>' + row.iban + '</td>' +
+            '<td>' + row.purpose + '</td>' + '<td>' + row.sum + '</td>' + '<td>' + row.currency + '</td>' +
+            '<td>' + row.total + '</td>' + '<td>' + row.commission + '</td></tr>';
+        rows = rows + row;
     })
     var tbody = document.getElementById("transactions");
     tbody.innerHTML = rows;
 }
+
+const cityName = document.getElementById("cityName");
+const precipitation = document.getElementById("precipitation");
+const temp = document.getElementById("temp");
+const feelas = document.getElementById("feelas");
+const weatherImg = document.getElementById("weatherImg");
+const humidity = document.getElementById("humidity");
+const pressure = document.getElementById("pressure");
+const refreshTime = document.getElementById("refreshTime");
+
+function get_weather_data() {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=Kyiv,ua&APPID=92961c01c4424401438a161b5bf7f97d&lang=ua`;
+    const xhr = new XMLHttpRequest();
+    try {
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let data = JSON.parse(this.responseText);
+                console.log(data);
+                cityName.textContent = `Місто : ${data.name}`;
+                precipitation.textContent = `Небо : ${data.weather[0].description}`
+                weatherImg.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+                temp.textContent = `Температура : ${ktc(data.main.temp)}`;
+                feelas.textContent = `Відчувається як : ${ktc(data.main.feels_like)}`;
+                pressure.textContent = `Атмосферний тиск : ${data.main.pressure}`;
+                humidity.textContent = `Вологість повітря : ${data.main.humidity}`;
+                refreshTime.textContent = `Оновлено : ${format_time(data.dt)}`;
+            }
+        }
+        xhr.send()
+    }
+    catch (ex) {
+        alert(ex);
+    }
+}
+
+function ktc(k) {
+    k = (k - 273.15);
+    return k.toFixed(2);
+}
+
+const usd = document.getElementById("usd");
+const eur = document.getElementById("eur");
+const currencyRefreshTime = document.getElementById("currencyRefreshTime");
+
+function get_currency_data() {
+    let url = `https://api.monobank.ua/bank/currency`;
+    let data;
+    const xhr = new XMLHttpRequest();
+    try {
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                data = JSON.parse(this.responseText);
+                localStorage.setItem("currency", JSON.stringify(data));
+                let usd_currency = data.filter(obj => { return obj.currencyCodeA == 840 });
+                let eur_currency = data.filter(obj => { return obj.currencyCodeA == 978 });
+                currencyRefreshTime.textContent = `Оновлено : ${format_time(usd_currency[0].date)}`;
+                usd.textContent = `USD : ${usd_currency[0].rateBuy} | ${usd_currency[0].rateSell}`;
+                eur.textContent = `EUR : ${eur_currency[0].rateBuy} | ${eur_currency[0].rateSell}`;
+                console.log(data);
+            }
+        }
+        xhr.send();
+    }
+    catch (ex) {
+        alert(ex);
+    }
+}
+
+function getWeatherForecast() {
+    get_weather_data();
+    setInterval(get_weather_data, 1000 * 60 * 10);
+}
+
+function getCurrencyOncePerDay() {
+    get_currency_data();
+    setInterval(get_currency_data, 1000 * 60 * 60 * 24);
+}
+
+function format_time(s) {
+    const dtFormat = new Intl.DateTimeFormat('uk-UA', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+        timeZone: 'EET'
+    });
+
+    return dtFormat.format(new Date(s * 1e3));
+}
+
+getWeatherForecast();
+getCurrencyOncePerDay();

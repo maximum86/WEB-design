@@ -10,6 +10,37 @@
 </head>
 
 <body>
+    <div class="content">
+        <div></div>
+        <div class="currency">
+            <p id="currencyRefreshTime"></p>
+            <p id="usd"></p>
+            <p id="eur"></p>
+        </div>
+        <div class="location">
+            <div>
+                <p id="refreshTime"></p>
+            </div>
+            <div>
+                <p id="cityName"></p>
+                <p id="precipitation"></p>
+            </div>
+            <div>
+                <img src="#" alt="not loaded" id="weatherImg">
+            </div>
+        </div>
+
+        <div class="weather">
+            <div>
+                <p id="temp"></p>
+                <p id="feelas"></p>
+            </div>
+            <div>
+                <p id="pressure"></p>
+                <p id="humidity"></p>        
+            </div>
+        </div>
+    </div>
     <h3>Платіжне доручення</h3>
     <form name="payment">
         <fieldset>
@@ -55,10 +86,10 @@
             <label class="msg_non" id="sum_err"></label><br/>
             <label for="sum" class="required">Валюта платежу</label>
             <select name="currency" id="currency">
-                <option value="1">Гривня, UAH
-                <option value="37">Долар США, USD
-                <option value="38">Євро, EUR
-                <option value="8">Польський злотий, PLN
+                <option value="980">Гривня, UAH
+                <option value="840">Долар США, USD
+                <option value="978">Євро, EUR
+                <option value="985">Польський злотий, PLN
             </select>
             <br /><label for="total">Сума</label>
             <input type="number" name="total" placeholder="Сума в вибраній валюті, розраховується автоматично"

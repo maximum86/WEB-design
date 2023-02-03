@@ -15,7 +15,7 @@
     }
 
     .required::after {
-        content:" *";
+        content: " *";
         color: red;
     }
 
@@ -55,21 +55,21 @@
     }
 
     .msg_non {
-        visibility:hidden; 
+        visibility: hidden;
         width: 200px;
     }
 
     .msg_err {
-        visibility:visible;
-        color:red;
-        font-size:10pt;
+        visibility: visible;
+        color: red;
+        font-size: 10pt;
         width: 200px;
     }
 
     .msg_ok {
-        visibility:visible;
-        color:green;
-        font-size:10pt;
+        visibility: visible;
+        color: green;
+        font-size: 10pt;
         width: 200px;
     }
 }
@@ -91,7 +91,7 @@
     }
 
     .required::after {
-        content:" *";
+        content: " *";
         color: red;
     }
 
@@ -132,21 +132,21 @@
     }
 
     .msg_non {
-        visibility:hidden; 
+        visibility: hidden;
         width: 200px;
     }
 
     .msg_err {
-        visibility:visible;
-        color:red;
-        font-size:10pt;
+        visibility: visible;
+        color: red;
+        font-size: 10pt;
         width: 200px;
     }
 
     .msg_ok {
-        visibility:visible;
-        color:green;
-        font-size:10pt;
+        visibility: visible;
+        color: green;
+        font-size: 10pt;
         width: 200px;
     }
 }
@@ -168,7 +168,7 @@
     }
 
     .required::after {
-        content:" *";
+        content: " *";
         color: red;
     }
 
@@ -209,21 +209,21 @@
     }
 
     .msg_non {
-        visibility:hidden; 
+        visibility: hidden;
         width: 200px;
     }
 
     .msg_err {
-        visibility:visible;
-        color:red;
-        font-size:10pt;
+        visibility: visible;
+        color: red;
+        font-size: 10pt;
         width: 200px;
     }
 
     .msg_ok {
-        visibility:visible;
-        color:green;
-        font-size:10pt;
+        visibility: visible;
+        color: green;
+        font-size: 10pt;
         width: 200px;
     }
 }
@@ -245,7 +245,7 @@
     }
 
     .required::after {
-        content:" *";
+        content: " *";
         color: red;
     }
 
@@ -257,9 +257,9 @@
     }
 
     .required::after {
-        content:" *";
+        content: " *";
         color: red;
-      }
+    }
 
     .btn {
         background-color: aquamarine;
@@ -291,21 +291,21 @@
     }
 
     .msg_non {
-        visibility:hidden; 
+        visibility: hidden;
         width: 250px;
     }
 
     .msg_err {
-        visibility:visible;
-        color:red;
-        font-size:10pt;
+        visibility: visible;
+        color: red;
+        font-size: 10pt;
         width: 250px;
     }
 
     .msg_ok {
-        visibility:visible;
-        color:green;
-        font-size:10pt;
+        visibility: visible;
+        color: green;
+        font-size: 10pt;
         width: 250px;
     }
 }
@@ -314,21 +314,45 @@
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
-  }
-  
-  #transactions td, #transactions th {
+}
+
+#transactions td,
+#transactions th {
     border: 1px solid #ddd;
     padding: 8px;
-  }
-  
-  #transactions tr:nth-child(even){background-color: #f2f2f2;}
-  
-  #transactions tr:hover {background-color: #ddd;}
-  
-  #transactions th {
+}
+
+#transactions tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#transactions tr:hover {
+    background-color: #ddd;
+}
+
+#transactions th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
     background-color: #04AA6D;
     color: white;
-  }
+}
+
+div {
+    width: 100%;
+    align-items: center;
+}
+
+p {
+    vertical-align: middle;
+}
+
+.weather,
+.location {
+    display: inline-flex;
+}
+
+.content {
+    display: inline-flex;
+    background-color: darkturquoise;
+}
